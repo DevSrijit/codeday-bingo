@@ -23,7 +23,7 @@ function shuffle(array) {
 
 // Initialize the bingo numbers
 function initializeNumbers() {
-    remainingNumbers = shuffle(Array.from({ length: 75 }, (_, i) => i + 1));
+    remainingNumbers = shuffle(Array.from({ length: 90 }, (_, i) => i + 1));
 }
 
 // Endpoint to listen for numbers
