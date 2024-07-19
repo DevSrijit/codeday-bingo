@@ -6,6 +6,7 @@ const port = 3000;
 
 class NumberEmitter extends EventEmitter {}
 const numberEmitter = new NumberEmitter();
+numberEmitter.setMaxListeners(100); // Increase the max listeners as needed
 
 let gameStarted = false;
 let intervalId = null;
@@ -28,7 +29,7 @@ function initializeNumbers() {
 
 app.get('/', (req, res) => {
     res.send('Welcome to CodeDay Kolkata 🚀');
-  });
+});
 
 // Endpoint to listen for numbers
 app.get('/stream', (req, res) => {
