@@ -26,6 +26,10 @@ function initializeNumbers() {
     remainingNumbers = shuffle(Array.from({ length: 75 }, (_, i) => i + 1));
 }
 
+app.get('/', (req, res) => {
+    res.send('Welcome to CodeDay Kolkata 🚀');
+  });
+
 // Endpoint to listen for numbers
 app.get('/stream', (req, res) => {
     res.setHeader('Content-Type', 'text/event-stream');
