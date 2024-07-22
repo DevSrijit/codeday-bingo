@@ -11,6 +11,7 @@ numberEmitter.setMaxListeners(100); // Increase the max listeners as needed
 let gameStarted = false;
 let intervalId = null;
 let remainingNumbers = [];
+let currentNumber = null;  // Store the current number
 const bingoWinners = [];
 
 // Function to shuffle an array
@@ -37,10 +38,12 @@ app.get('/stream', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
 
-    if (!gameStarted) {
-        res.write('data: Waiting for the game to start\n\n');
+    if (gameStarted) {
+        if (currentNumber !== null) {
+            res.write(`data: ${currentNumber}\n\n`);
+        }
     } else {
-        res.write('data: Game has already started\n\n');
+        res.write('data: Waiting for the game to start\n\n');
     }
 
     const sendNumber = (number) => {
@@ -62,11 +65,12 @@ app.get('/start', (req, res) => {
 
         intervalId = setInterval(() => {
             if (remainingNumbers.length > 0) {
-                const number = remainingNumbers.pop();
-                numberEmitter.emit('number', number);
+                currentNumber = remainingNumbers.pop();
+                numberEmitter.emit('number', currentNumber);
             } else {
                 clearInterval(intervalId);
                 gameStarted = false;
+                currentNumber = null;
             }
         }, 1000);
 
@@ -81,6 +85,7 @@ app.get('/stop', (req, res) => {
     if (gameStarted) {
         clearInterval(intervalId);
         gameStarted = false;
+        currentNumber = null;
         res.send('Game stopped!');
     } else {
         res.send('Game is not running!');
